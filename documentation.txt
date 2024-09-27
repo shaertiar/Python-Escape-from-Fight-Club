@@ -1,0 +1,18 @@
+NOTICE:
+Please do not try to turn off the game using non-standard methods. This may result in the loss of 
+data from the last game session...
+
+Предупреждение:
+Пожалуйста не пытайтесь выключить игру не стандартными методами. Это может привести к не сохранению 
+или утрате игровых данных...
+
+
+Authors:
+Programmer: Shaertiar
+Artist: Air speed low!, Shaertiar
+Concept developer: Air speed low!
+
+Авторы:
+Программист: Shaertiar
+Художники: Air speed low!, Shaertiar
+Концепт художник: Air speed low!

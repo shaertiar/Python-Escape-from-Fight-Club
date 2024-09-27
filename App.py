@@ -52,11 +52,11 @@ class App:
         Проверка на возможность игры (возможные причины, например слишком маленькое разрешение 
         экрана). В переменной хрониться None или строка с причиной отказа и решением.
         '''
-        is_can_play = self.system_manager.is_can_play
+        reason = self.system_manager.not_play_reason
         
-        if not is_can_play:
-            print(is_can_play)
-            return 0
+        if reason:
+            self.system_manager.handle_error(reason)
+            return
         
         if self.mode == 'Menu':
             self.mode = self.menu.play()

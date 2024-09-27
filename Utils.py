@@ -5,25 +5,24 @@ import textwrap
 class SystemManager:
     # Конструктор
     def __init__(self) -> None:
-        self.is_can_play = not self._is_can_play()
+        self.not_play_reason = self._get_not_play_reason()
         
     # Метод для получения разрешения на запуск игры
-    def _is_can_play(self) -> None|str:
-        if refusal_reason := self._check_display_size(): return refusal_reason
+    def _get_not_play_reason(self) -> str|None:
+        if self._check_display_size(): return 'Display size'
 
     # Метод проверки разрешения экрана
-    def _check_display_size(self) -> None|str:
+    def _check_display_size(self) -> bool:
         # Получение разрешения экрана
         _window = pg.display.set_mode()
         _WW, _WH = _window.get_size()
         pg.display.quit()
         pg.init()
-        
+    
         if _WW < 1280 or _WH < 720:
-            return textwrap.fill('\033[91mYour screen resolution is not supported by the game. \
-Please change it to at least 1280x720. If your screen resolution is the suggested one or higher \
-than the suggested one, try changing the scale to 100%. Otherwise, contact support \
-KAAOS.tgbot@gmail.com\033[0m', width=100)
+            return True
+        
+        return False
 
     # Метод обработки ошибки
     def handle_error(self, error) -> None:
@@ -32,6 +31,25 @@ KAAOS.tgbot@gmail.com\033[0m', width=100)
         # Вывод натуральной ошибки
         print(textwrap.fill(f'\033[93mError: {error}\033[0m', width=100), '\n')
         
-        # Вывод формальной ошибки
+        # Определение ошибки
         if error.startswith('No file '):
-            print(textwrap.fill(f'\033[91mSystem cant find file {error.split("'")[3]}\\{error.split("'")[1]}.\033[0m', width=100))
+            error_text = f'mSystem cant find file \
+{error.split("'")[3]}\\{error.split("'")[1]}.'
+
+        elif error == 'Display size':
+            error_text = 'mYour screen resolution is not supported by the game. Please \
+change it to at least 1280x720. If your screen resolution is the suggested one or higher than the \
+suggested one, try changing the scale to 100%. \
+Otherwise, contact support KAAOS.tgbot@gmail.com'
+
+        else:
+            error_text = 'Error not define...'
+            
+        # Вывод формальной ошибки
+        print('\033[91')
+        print(textwrap.fill(error_text, width=100))
+        print('\033[0m')
+            
+        pg.quit()
+            
+        input("Enter to exit...")
