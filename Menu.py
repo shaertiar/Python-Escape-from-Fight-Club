@@ -6,14 +6,16 @@ import Button
 class Menu:
     # Конструктор
     def __init__(self, window:pg.surface.Surface, time_clock:pg.time.Clock, display_update_func) -> None:
-        self.window = window
-        self.clock = time_clock
-        self.display_update_func = display_update_func
-        
         # Загрузка данных
         self.load_textures()
         self.load_buttons()
         self.load_fonts()
+        
+        self.window = window
+        self.clock = time_clock
+        self.display_update_func = display_update_func
+        self.current_button = self.continue_button
+        self.current_button.is_hover = True
         
     # Метод начала игрового цикла
     def play(self) -> str:
@@ -29,23 +31,36 @@ class Menu:
                 
                 # Обработка нажатий на клавиши
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        return 'Game'
+                    if event.key == pg.K_RETURN:
+                        if self.current_button == self.continue_button: return 'Game'
+                        elif self.current_button == self.settings_button: self.handle_settings_button_click()
+                        elif self.current_button == self.authors_button: self.handle_authors_button_click()
+                            
+                    elif event.key == pg.K_UP:
+                        if self.current_button == self.continue_button: self.change_current_button(self.authors_button)
+                        elif self.current_button == self.settings_button: self.change_current_button(self.continue_button)
+                        elif self.current_button == self.authors_button: self.change_current_button(self.settings_button)
+                        
+                    elif event.key == pg.K_DOWN:
+                        if self.current_button == self.continue_button: self.change_current_button(self.settings_button)
+                        elif self.current_button == self.settings_button: self.change_current_button(self.authors_button)
+                        elif self.current_button == self.authors_button: self.change_current_button(self.continue_button)
                     
-                # Обработка нажатия на кнопки
-                elif event.type == pg.MOUSEBUTTONUP:
-                    self.continue_button.is_clicked(event.pos)
-                    self.settings_button.is_clicked(event.pos)
-                    self.authors_button.is_clicked(event.pos)
+                # Обработка нажатия на кнопки # Todo: Найти решение
+                # elif event.type == pg.MOUSEBUTTONUP:
+                #     self.continue_button.is_clicked(event.pos)
+                #     self.settings_button.is_clicked(event.pos)
+                #     self.authors_button.is_clicked(event.pos)
                     
                         
-            self.window.fill((246, 246, 246))
+            self.window.fill((246, 246, 246)) # Todo: Заменить на текстуру
             
-            self.window.blit(self.main_character_image, (1120, 0))
+            self.window.blit(self.main_character_image, (1120, 0)) # Todo: Изменить на нормальное фото
             
             # Отображение надписей
             self.window.blit(self.font_title.render('Escape from', True, (0, 0, 0)), (50, 50))
             self.window.blit(self.font_title.render('Fight-Club', True, (0, 0, 0)), (50, 150))
+            self.window.blit(self.font_text.render('Version: 0.1.0', True, (0, 0, 0)), (1799, 1066))
             
             # Отображение кнопак
             self.continue_button.draw(self.window)
@@ -54,6 +69,20 @@ class Menu:
             
             # Обвновление экрана
             self.display_update_func(self.clock, self.window)
+            
+    # Медот изменения текущей кнопки
+    def change_current_button(self, new_button:Button.Button) -> None:
+        self.current_button.is_hover = False
+        self.current_button = new_button
+        self.current_button.is_hover = True
+        
+    # Метод обработки нажатия на кнопку настроек
+    def handle_settings_button_click(self) -> None:
+        print('Типо нажал на настройки')
+        
+    # Метод обработки нажатия на кнопку авторов
+    def handle_authors_button_click(self) -> None:
+        print('Типо нажал на авторов')
             
     # Метод загрузки всех текстур
     def load_textures(self) -> None:

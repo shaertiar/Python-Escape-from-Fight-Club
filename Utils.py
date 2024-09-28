@@ -19,8 +19,7 @@ class SystemManager:
         pg.display.quit()
         pg.init()
     
-        if _WW < 1280 or _WH < 720:
-            return True
+        if _WW < 1280 or _WH < 720: return True
         
         return False
 
@@ -32,18 +31,9 @@ class SystemManager:
         print(textwrap.fill(f'\033[93mError: {error}\033[0m', width=100), '\n')
         
         # Определение ошибки
-        if error.startswith('No file '):
-            error_text = f'mSystem cant find file \
-{error.split("'")[3]}\\{error.split("'")[1]}.'
-
-        elif error == 'Display size':
-            error_text = 'mYour screen resolution is not supported by the game. Please \
-change it to at least 1280x720. If your screen resolution is the suggested one or higher than the \
-suggested one, try changing the scale to 100%. \
-Otherwise, contact support KAAOS.tgbot@gmail.com'
-
-        else:
-            error_text = 'Error not define...'
+        if error.startswith('No file '): error_text = f'mSystem cant find file {error.split("'")[3]}\\{error.split("'")[1]}.'
+        elif error == 'Display size': error_text = 'mYour screen resolution is not supported by the game. Please change it to at least 1280x720. If your screen resolution is the suggested one or higher than the suggested one, try changing the scale to 100%. Otherwise, contact support KAAOS.tgbot@gmail.com'
+        else: error_text = 'Error not define...'
             
         # Вывод формальной ошибки
         print('\033[91')
