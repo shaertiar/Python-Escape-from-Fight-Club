@@ -1,6 +1,6 @@
 import pygame as pg
-import random # Todo: Delete this
 import Button
+import Menu_displays
 
 # Класс меню
 class Menu:
@@ -16,6 +16,7 @@ class Menu:
         self.display_update_func = display_update_func
         self.current_button = self.continue_button
         self.current_button.is_hover = True
+        self.mode = 'Main menu'
         
     # Метод начала игрового цикла
     def play(self) -> str:
@@ -23,36 +24,8 @@ class Menu:
         is_play = True
         while is_play:
             # Обработка событий
-            for event in pg.event.get():
-                # Обработка выхода
-                if event.type == pg.QUIT: 
-                    pg.quit()
-                    exit()
-                
-                # Обработка нажатий на клавиши
-                elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_RETURN:
-                        if self.current_button == self.continue_button: return 'Game'
-                        elif self.current_button == self.settings_button: self.handle_settings_button_click()
-                        elif self.current_button == self.authors_button: self.handle_authors_button_click()
-                            
-                    elif event.key == pg.K_UP:
-                        if self.current_button == self.continue_button: self.change_current_button(self.authors_button)
-                        elif self.current_button == self.settings_button: self.change_current_button(self.continue_button)
-                        elif self.current_button == self.authors_button: self.change_current_button(self.settings_button)
-                        
-                    elif event.key == pg.K_DOWN:
-                        if self.current_button == self.continue_button: self.change_current_button(self.settings_button)
-                        elif self.current_button == self.settings_button: self.change_current_button(self.authors_button)
-                        elif self.current_button == self.authors_button: self.change_current_button(self.continue_button)
-                    
-                # Обработка нажатия на кнопки # Todo: Найти решение
-                # elif event.type == pg.MOUSEBUTTONUP:
-                #     self.continue_button.is_clicked(event.pos)
-                #     self.settings_button.is_clicked(event.pos)
-                #     self.authors_button.is_clicked(event.pos)
-                    
-                        
+            if self.handler_events(): return 'Game'
+
             self.window.fill((246, 246, 246)) # Todo: Заменить на текстуру
             
             self.window.blit(self.main_character_image, (1120, 0)) # Todo: Изменить на нормальное фото
@@ -76,6 +49,39 @@ class Menu:
         self.current_button = new_button
         self.current_button.is_hover = True
         
+    # Метод обработки событий
+    def handler_events(self) -> None:
+        for event in pg.event.get():
+            # Обработка выхода
+            if event.type == pg.QUIT: 
+                pg.quit()
+                exit()
+            
+            # Обработка нажатий на клавиши
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_RETURN:
+                    if self.current_button == self.continue_button: return True
+                    elif self.current_button == self.settings_button: self.handle_settings_button_click()
+                    elif self.current_button == self.authors_button: self.handle_authors_button_click()
+                        
+                elif event.key == pg.K_UP:
+                    if self.current_button == self.continue_button: self.change_current_button(self.authors_button)
+                    elif self.current_button == self.settings_button: self.change_current_button(self.continue_button)
+                    elif self.current_button == self.authors_button: self.change_current_button(self.settings_button)
+                    
+                elif event.key == pg.K_DOWN:
+                    if self.current_button == self.continue_button: self.change_current_button(self.settings_button)
+                    elif self.current_button == self.settings_button: self.change_current_button(self.authors_button)
+                    elif self.current_button == self.authors_button: self.change_current_button(self.continue_button) 
+                    
+            print(event)
+        
+                # Обработка нажатия на кнопки # Todo: Найти решение
+                # elif event.type == pg.MOUSEBUTTONUP:
+                #     self.continue_button.is_clicked(event.pos)
+                #     self.settings_button.is_clicked(event.pos)
+                #     self.authors_button.is_clicked(event.pos)
+                
     # Метод обработки нажатия на кнопку настроек
     def handle_settings_button_click(self) -> None:
         print('Типо нажал на настройки')
@@ -101,3 +107,9 @@ class Menu:
     def load_fonts(self) -> None:
         self.font_title = pg.font.Font(r'src/font/Home Video/HomeVideo-Regular.otf', 100)
         self.font_text = pg.font.Font(r'src/font/Home Video/HomeVideo-Regular.otf', 14)
+
+    # Метод загрузки частей меню
+    def load_menu_displays(self) -> None:
+        self.main_menu_display = Menu_displays.Main_menu_display(self.window)
+        self.settings_menu_display = Menu_displays.Settings_menu_display(self.window)
+        self.authors_menu_display = Menu_displays.Authors_menu_display(self.window)
