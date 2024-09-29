@@ -4,6 +4,7 @@ import Menu
 import Game
 
 pg.init() # Иниацилизация библиотеки
+pg.joystick.init() 
         
 # Создание класса приложения
 class App:
