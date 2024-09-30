@@ -1,6 +1,27 @@
 import pygame as pg
 import textwrap
 
+class JoystickButtons:
+    A = 0
+    B = 1
+    X = 2
+    Y = 3
+    LB = 4
+    RB = 5
+    View = 6
+    Menu = 7
+    LeftStick = 8
+    RightStick = 9
+    Xbox = 10
+    Share = 11
+    
+    Direction_horizont = 0
+    Direction_vertical = 1
+    Left = -1
+    Right = 1
+    Down = -1
+    Up = 1
+
 # Класс системного менеджера
 class SystemManager:
     # Конструктор

@@ -4,7 +4,6 @@ import Menu
 import Game
 
 pg.init() # Иниацилизация библиотеки
-pg.joystick.init() 
         
 # Создание класса приложения
 class App:
@@ -14,6 +13,7 @@ class App:
         
         # Переменные
         self.mode = 'Menu'
+        self.play_mode = 'Keyboard'
         self.is_debug_mode = is_debug_mode
         
         # Загрузка и запуски систем
@@ -21,7 +21,7 @@ class App:
         
         # Классы
         self.clock = pg.time.Clock()
-        self.menu = Menu.Menu(self.window, self.clock, self.update)
+        self.menu = Menu.Menu(self.window, self.clock, self.update, self.connect_joystick)
         # self.game = Game.Game(self.window, self.clock, self.update)
         
     # Метод создания окна
@@ -46,6 +46,16 @@ class App:
         
         pg.display.update()
         clock.tick(60)
+        
+    # Метод подключения джойстика
+    def connect_joystick(self) -> None:
+        if self.play_mode == 'Keyboard':
+            self.play_mode = 'Joystick'
+            self.menu.connect_joystick()
+        else:
+            self.play_mode = 'Keyboard'
+            self.menu.disconnect_joystick()
+        
         
     # Метод запуска приложения
     def launch(self) -> None:
