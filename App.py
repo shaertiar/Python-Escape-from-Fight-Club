@@ -22,12 +22,14 @@ class App:
         # Классы
         self.clock = pg.time.Clock()
         self.menu = Menu.Menu(self.window, self.clock, self.update, self.connect_joystick)
-        # self.game = Game.Game(self.window, self.clock, self.update)
+        self.game = Game.Game(self.window, self.clock, self.update, self.connect_joystick)
         
     # Метод создания окна
     def create_window(self) -> None:
         # Переменные
         self.RES = self.WW, self.WH = 1920, 1080
+        
+        pg.mouse.set_visible(False) # Прозрачный курсор
         
         # Создание окна
         if self.is_debug_mode:
@@ -69,7 +71,7 @@ class App:
             self.system_manager.handle_error(reason)
             return
         
-        if self.mode == 'Menu':
-            self.mode = self.menu.play()
-        else:
-            self.mode = self.game.play()
+        while True:
+            if self.mode == 'Menu': self.mode = self.menu.play()
+            if self.mode == 'Game': self.mode = self.game.play()
+            
